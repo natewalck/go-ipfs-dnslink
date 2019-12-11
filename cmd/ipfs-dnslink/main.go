@@ -37,6 +37,13 @@ func main() {
 				EnvVars: []string{"NAMECHEAP_DOMAIN"},
 			},
 		),
+		altsrc.NewIntFlag(
+			&cli.IntFlag{
+				Name:    "ttl",
+				Value:   1800,
+				EnvVars: []string{"NAMECHEAP_TTL"},
+			},
+		),
 		&cli.StringFlag{Name: "cid"},
 		&cli.StringFlag{Name: "config"},
 	}
@@ -49,13 +56,13 @@ func main() {
 					return fmt.Errorf("Missing value for %s", value)
 				}
 			}
-
 			err := updateDNSLink(
 				c.String("api_user"),
 				c.String("api_token"),
 				c.String("user"),
 				c.String("domain"),
 				c.String("cid"),
+				c.Int("ttl"),
 			)
 			if err != nil {
 				return err
@@ -79,7 +86,7 @@ func main() {
 	}
 }
 
-func updateDNSLink(api_user, api_token, user, domain, cid string) error {
+func updateDNSLink(api_user, api_token, user, domain, cid string, ttl int) error {
 	// Add http if missing, otherwise the TLD lib doens't parse correctly -_-
 	var url string
 	if strings.HasPrefix(domain, "https://") || strings.HasPrefix(domain, "http://") {
@@ -104,6 +111,7 @@ func updateDNSLink(api_user, api_token, user, domain, cid string) error {
 					Name:    u.Subdomain,
 					Type:    "TXT",
 					Address: cid,
+					TTL:     ttl,
 				},
 			}
 			_, err := client.DomainDNSSetHosts(
