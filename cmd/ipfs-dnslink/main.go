@@ -16,24 +16,28 @@ func main() {
 		altsrc.NewStringFlag(
 			&cli.StringFlag{
 				Name:    "api_user",
+				Usage:   "Enter the username for namecheap (if different from main account)",
 				EnvVars: []string{"API_USER"},
 			},
 		),
 		altsrc.NewStringFlag(
 			&cli.StringFlag{
 				Name:    "api_token",
+				Usage:   "api key for namecheap",
 				EnvVars: []string{"API_TOKEN"},
 			},
 		),
 		altsrc.NewStringFlag(
 			&cli.StringFlag{
 				Name:    "user",
+				Usage:   "Main namecheap account username",
 				EnvVars: []string{"NAMECHEAP_USER"},
 			},
 		),
 		altsrc.NewStringFlag(
 			&cli.StringFlag{
 				Name:    "domain",
+				Usage:   "Domain to updated the dnslink entry on. Should be in the format of some.domain.com",
 				EnvVars: []string{"NAMECHEAP_DOMAIN"},
 			},
 		),
@@ -44,8 +48,8 @@ func main() {
 				EnvVars: []string{"NAMECHEAP_TTL"},
 			},
 		),
-		&cli.StringFlag{Name: "cid"},
-		&cli.StringFlag{Name: "config"},
+		&cli.StringFlag{Name: "cid", Usage: "IPFS CID to update the dnslink to."},
+		&cli.StringFlag{Name: "config", Usage: "Path to config.yaml"},
 	}
 
 	app := &cli.App{
